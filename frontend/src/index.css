@@ -1,0 +1,32 @@
+@import "tailwindcss";
+.leaflet-container {
+  height: 100%;
+  width: 100%;
+}
+/* src/index.css or wherever your global styles are */
+
+body {
+  margin: 0;
+  padding: 0;
+  background-image: url('.Journey through the Mariana Trenchs azure depths in stunning 8K.jpg'); /* or '../assets/bg.png' depending on file */
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center;
+  background-color: rgba(0, 255, 255, 0.2); /* aqua tint overlay */
+}
+
+/* Optional: If you want to layer a color over the image */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  background-color: rgba(0, 255, 255, 0.2); /* semi-transparent aqua overlay */
+  z-index: -1;
+}
+
+
+ 

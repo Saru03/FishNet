@@ -1,12 +1,16 @@
-// Home.jsx
+
 import React from "react";
-import Button from "../QualityAssurance/Button"; // make sure path is correct
+import Button from "../QualityAssurance/Button";
 
 const Home = () => {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-4 bg-gray-100">
-      <h1 className="text-3xl font-bold text-center mb-6 text-gray-800">Welcome to FishNet</h1>
-      <p className="text-center mb-10 text-gray-600">Choose an option to get started:</p>
+    <div className="min-h-screen pt-32 pb-10 px-4 bg-gradient-to-b from-white to-blue-100 flex flex-col items-center justify-center">
+      <h1 className="text-4xl sm:text-5xl font-bold text-center text-blue-700 mb-4">
+        Welcome to <span className="text-green-500">Fish</span><span className="text-blue-400">Net</span>
+      </h1>
+      <p className="text-lg text-center text-gray-600 mb-10">
+        Empowering Fisheries with Smart Technology 🐟⚙️
+      </p>
       <Button />
     </div>
   );

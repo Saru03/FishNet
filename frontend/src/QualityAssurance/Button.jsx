@@ -1,3 +1,4 @@
+
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -5,19 +6,19 @@ const Button = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="flex flex-col sm:flex-row gap-6">
+    <div className="flex gap-6">
       <button
-        onClick={() => navigate("/disease-detection")}
-        className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg shadow-md transition duration-300 text-lg font-medium"
+        onClick={() => navigate("/quality-assurance")}
+        className="bg-blue-500 hover:bg-blue-700 text-white px-6 py-3 rounded-md shadow-md text-lg"
       >
-        Go to Disease Detection
+        Quality Assurance
       </button>
 
       <button
-        onClick={() => navigate("/freshness-detection")}
-        className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg shadow-md transition duration-300 text-lg font-medium"
+        onClick={() => navigate("/forecast")}
+        className="bg-green-500 hover:bg-green-700 text-white px-6 py-3 rounded-md shadow-md text-lg"
       >
-        Go to Freshness Detection
+        Price Forecast
       </button>
     </div>
   );

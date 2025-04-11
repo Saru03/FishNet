@@ -1,31 +1,10 @@
-{/*import React from 'react'
-import { NavLink } from 'react-router-dom'
-
-const Navbar = () => {
-    
-  return (
-    <div>
-      <nav  className="fixed top-0 left-0 w-full bg-white z-50 shadow-md h-16">
-      
-
-
-        <NavLink className={(e)=>{return e.isActive?"red": "" }} to="/"><li>Home</li></NavLink>
-        <NavLink className={(e)=>{return e.isActive?"red": "" }} to="/about"><li>About</li></NavLink>
-        <NavLink className={(e)=>{return e.isActive?"red": "" }} to="/login"><li>Login</li></NavLink>
-        <NavLink className={(e)=>{return e.isActive?"red": "" }} to="/register"><li>Register</li></NavLink>
-      </nav>
-    </div>
-  )
-}
-
-export default Navbar*/}
-import React from "react";
+import React from "react"; 
 import { Link } from "react-router-dom";
 
 const Navbar = () => {
   return (
-    <nav className="bg-blue-600 shadow-md fixed top-0 left-0 right-0 z-50">
-      <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+    <nav className="bg-blue-600 shadow-md fixed top-0 left-0 right-0 z-50 h-20">
+      <div className="max-w-7xl mx-auto px-6 h-full flex justify-between items-center">
         {/* Logo */}
         <Link
           to="/"
@@ -34,7 +13,7 @@ const Navbar = () => {
           🐟 <span className="text-green-500">Fish</span><span className="text-blue-300">Net</span>
         </Link>
 
-        {/* Navigation Links with spacing */}
+        
         <ul className="flex space-x-6">
           <li>
             <Link
@@ -51,7 +30,6 @@ const Navbar = () => {
             >
               About
             </Link>
-            
           </li>
           <li>
             <Link
@@ -60,7 +38,6 @@ const Navbar = () => {
             >
               Login
             </Link>
-            
           </li>
           <li>
             <Link
@@ -69,7 +46,6 @@ const Navbar = () => {
             >
               Register
             </Link>
-            
           </li>
           <li>
             <Link

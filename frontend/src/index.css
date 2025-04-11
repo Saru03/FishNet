@@ -8,13 +8,11 @@
 body {
   margin: 0;
   padding: 0;
-  background-image: url('.Journey through the Mariana Trenchs azure depths in stunning 8K.jpg'); /* or '../assets/bg.png' depending on file */
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-attachment: fixed;
-  background-position: center;
-  background-color: rgba(0, 255, 255, 0.2); /* aqua tint overlay */
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+  background-color: #f9fafb;
 }
+
 
 /* Optional: If you want to layer a color over the image */
 body::before {

@@ -6,7 +6,7 @@ const ForecastSections = () => {
 
   return (
     <div className="p-6 max-w-xl mx-auto text-center">
-      <h1 className="text-3xl font-bold mb-8">Forecast Sections</h1>
+      <h1 className="text-3xl font-bold mb-8 text-blue-700">Forecast Sections</h1>
 
       <div className="grid gap-6">
         <button

@@ -74,7 +74,6 @@ const Fishlist = () => {
         <table className="w-full text-left text-sm border-collapse mb-6">
           <thead className="bg-blue-200 text-blue-700">
             <tr>
-              <th className="p-3">ID</th>
               <th className="p-3">Fish Name</th>
               <th className="p-3">Quantity (kg)</th>
               <th className="p-3">Price (₹)</th>
@@ -84,7 +83,6 @@ const Fishlist = () => {
           <tbody>
             {fishItems.map((item) => (
               <tr key={item.id} className="border-t hover:bg-blue-50">
-                <td className="p-3">{item.id}</td>
                 <td className="p-3">{item.fishName}</td>
                 <td className="p-3">{item.quantity}</td>
                 <td className="p-3">₹{item.price}</td>

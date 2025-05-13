@@ -23,6 +23,10 @@ import Fishlist from './Inventory/Fishlist';
 import OrderList from './Inventory/OrderList';
 import SalesList from './Inventory/SalesList';
 
+import MapweatherSections from './GeoWeather/Mapwethersections';  // Importing the MapweatherSections component
+import Maps from './GeoWeather/Maps';  // Importing the Maps component
+import Weather from './GeoWeather/Weather';  // Importing the Weather component
+
 function App() {
   return (
     <Router>
@@ -52,6 +56,11 @@ function App() {
             <Route path="/inventory" element={<Fishlist />} />
             <Route path="/orderlist" element={<OrderList />} />
             <Route path="/saleslist" element={<SalesList />} />
+
+            {/* Maps & Weather Routes */}
+            <Route path="/mapsandweather" element={<MapweatherSections />} />  {/* Home page section */}
+            <Route path="/maps" element={<Maps />} />  {/* Maps page */}
+            <Route path="/weather" element={<Weather />} />  {/* Weather page */}
           </Routes>
         </main>
 

@@ -6,7 +6,6 @@ const OrderList = () => {
   const [formData, setFormData] = useState({
     fishName: '',
     quantity: '',
-    supplierName: '',
     orderDate: ''
   });
 
@@ -23,7 +22,7 @@ const OrderList = () => {
       ...formData
     };
     setOrders([...orders, newOrder]);
-    setFormData({ fishName: '', quantity: '', supplierName: '', orderDate: '' });
+    setFormData({ fishName: '', quantity: '', orderDate: '' });
   };
 
   return (
@@ -53,15 +52,6 @@ const OrderList = () => {
               className="p-3 border rounded-lg" 
             />
             <input 
-              type="text" 
-              name="supplierName" 
-              value={formData.supplierName} 
-              onChange={handleChange} 
-              placeholder="Supplier Name" 
-              required 
-              className="p-3 border rounded-lg" 
-            />
-            <input 
               type="date" 
               name="orderDate" 
               value={formData.orderDate} 
@@ -82,20 +72,16 @@ const OrderList = () => {
           <table className="min-w-full text-left border">
             <thead className="bg-gray-100">
               <tr>
-                <th className="p-3">#ID</th>
                 <th className="p-3">Fish</th>
                 <th className="p-3">Qty</th>
-                <th className="p-3">Supplier</th>
                 <th className="p-3">Date</th>
               </tr>
             </thead>
             <tbody>
               {orders.map((order) => (
                 <tr key={order.id} className="border-t hover:bg-gray-50">
-                  <td className="p-3">{order.id}</td>
                   <td className="p-3">{order.fishName}</td>
                   <td className="p-3">{order.quantity}</td>
-                  <td className="p-3">{order.supplierName}</td>
                   <td className="p-3">{order.orderDate}</td>
                 </tr>
               ))}

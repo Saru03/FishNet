@@ -32,12 +32,13 @@ const FishMarketComparator = () => {
             className="col-span-1 sm:col-span-2 p-2 border rounded-md focus:ring-2 focus:ring-blue-300"
           >
             <option value="">Select Fish Type</option>
-            <option value="Rohu">Rohu</option>
-            <option value="Catla">Catla</option>
-            <option value="Common Carp">Common Carp</option>
-            <option value="Grass Corp">Grass Carp</option>
-            <option value="RoopChand">RoopChand</option>
-            <option value="Pangas CatFish">Pangas Catfish</option>
+            <option value="Indian Mackerel">Indian Mackerel</option>
+            <option value="Rock Lobster">Rock Lobster</option>
+            <option value="Silver Pomfret">Silver Pomfret</option>
+            <option value="Indian White Prawn">Indian White Prawn</option>
+            <option value="Spotted Crab">Spotted Crab</option>
+            <option value="Indo pacific Seer Fish">Indo pacific Seer Fish</option>
+            <option value="Johns Snapper">Johns Snapper</option>
           </select>
 
           <select
@@ -46,16 +47,25 @@ const FishMarketComparator = () => {
             className="col-span-1 sm:col-span-2 p-2 border rounded-md focus:ring-2 focus:ring-blue-300"
           >
             <option value="">Select Market</option>
-            <option value="DDA Market">DDA Market</option>
-            <option value="Ghazipur Market">Ghazipur Market</option>
-            <option value="Barnala Market">Barnala Market</option>
-            <option value="Ludiana Market">Ludiana Market</option>
-            <option value="Sunam Dhuri Market">Sunam Dhuri Market</option>
-            <option value="Amritsar Market">Amritsar Market</option>
-            <option value="Faridabad Market">Faridabad Market</option>
-            <option value="Yamuna Nagar Market">Yamuna Nagar Market</option>
-            <option value="Macchwatoli Retail Fish Market">Macchwatoli Market</option>
-            <option value="Mushallapur Wholesale Market">Mushallapur Market</option>
+            <option value="Mohanpura Modern Fish Market">Mohanpura Modern Fish Market</option>
+            <option value="Venlok Fish Market">Venlok Fish Market</option>
+            <option value="Vishakhapatnam Municipal Wholesale Fish Market">Vishakhapatnam Municipal Wholesale Fish Market</option>
+            <option value="Ghoghla Retail Fish Market">Ghoghla Retail Fish Market</option>
+            <option value="Vanakbara Retail Fish Market">Vanakbara Retail Fish Market</option>
+            <option value="Mapusa Fish Market">Mapusa Fish Market</option>
+            <option value="SGDPA Wholesale Fish Market">SGDPA Wholesale Fish Market</option>
+            <option value="Madikeri Retail Fish Market">Madikeri Retail Fish Market</option>
+            <option value="Padubidri Retail Fish Market">Padubidri Retail Fish Market</option>
+            <option value="Kavanad Retail Fish Market">Kavanad Retail Fish Market</option>
+            <option value="Ponnani Harbour Azheekkal ">Ponnani Harbour Azheekkal </option>
+            <option value="Panvel Fish Market">Panvel Fish Market</option>
+            <option value="Sasoon Dock Retail Fish Market">Sasoon Dock Retail Fish Market</option>
+            <option value="Naya Bazar Retail Fish Market">Naya Bazar Retail Fish Market</option>
+            <option value="Unit-4 Wholesale Fish Market">Unit-4 Wholesale Fish Market</option>
+            <option value="Badagada Retail Fish Market">Badagada Retail Fish Market</option>
+            <option value="Chintadripet Fish Market">Chintadripet Fish Market</option>
+            <option value="Kasivillangi Fish Market">Kasivillangi Fish Market</option>
+            <option value="Nelpattai Fish Market">Nelpattai Fish Market</option>
           </select>
 
           <select

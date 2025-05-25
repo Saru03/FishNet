@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { PlusCircle, ArrowRight } from 'lucide-react';
+import { PlusCircle } from 'lucide-react';
 
 const SalesList = () => {
   const [sales, setSales] = useState([]);
@@ -12,8 +11,6 @@ const SalesList = () => {
     quantity: '',
     pricePerFish: ''
   });
-
-  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -38,11 +35,43 @@ const SalesList = () => {
     });
   };
 
+  const totalSales = sales.reduce((acc, curr) => acc + curr.totalPrice, 0);
+  const totalQuantity = sales.reduce((acc, curr) => acc + parseInt(curr.quantity), 0);
+  const avgPrice = totalQuantity ? totalSales / totalQuantity : 0;
+
   return (
     <div className="min-h-screen w-full bg-gradient-to-br from-blue-100 to-blue-200 pt-24 pb-12 px-4">
       <div className="max-w-6xl mx-auto">
         <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">📦 Sales Records</h2>
 
+        {/* Analytical Stats */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <div className="bg-green-100 p-6 rounded-xl shadow-md flex justify-between items-center">
+            <div>
+              <h3 className="text-lg font-bold text-green-700">Total Sales</h3>
+              <p className="text-2xl font-semibold text-gray-800">₹{totalSales.toFixed(2)}</p>
+            </div>
+            <div className="text-green-600 text-4xl">💰</div>
+          </div>
+
+          <div className="bg-blue-100 p-6 rounded-xl shadow-md flex justify-between items-center">
+            <div>
+              <h3 className="text-lg font-bold text-blue-700">Total Quantity</h3>
+              <p className="text-2xl font-semibold text-gray-800">{totalQuantity} kg</p>
+            </div>
+            <div className="text-blue-600 text-4xl">🐟</div>
+          </div>
+
+          <div className="bg-yellow-100 p-6 rounded-xl shadow-md flex justify-between items-center">
+            <div>
+              <h3 className="text-lg font-bold text-yellow-700">Avg. Price per Fish</h3>
+              <p className="text-2xl font-semibold text-gray-800">₹{avgPrice.toFixed(2)}</p>
+            </div>
+            <div className="text-yellow-600 text-4xl">💵</div>
+          </div>
+        </div>
+
+        {/* Form */}
         <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-3 gap-4 bg-white shadow p-6 rounded-xl mb-8">
           <input type="date" name="saleDate" value={formData.saleDate} onChange={handleChange} required className="p-3 border rounded" />
           <input type="text" name="fishSpecies" value={formData.fishSpecies} onChange={handleChange} placeholder="Fish Species" required className="p-3 border rounded" />
@@ -59,6 +88,7 @@ const SalesList = () => {
           </button>
         </form>
 
+        {/* Table */}
         <div className="overflow-x-auto bg-white rounded-xl shadow">
           <table className="min-w-full text-left">
             <thead className="bg-gray-100 text-gray-700">
@@ -86,15 +116,6 @@ const SalesList = () => {
               ))}
             </tbody>
           </table>
-        </div>
-
-        <div className="mt-8 flex justify-center gap-4">
-          <button onClick={() => navigate('/inventory')} className="bg-gray-700 text-white py-2 px-4 rounded hover:bg-gray-800 flex items-center gap-2">
-            <ArrowRight size={18} /> Back to Inventory
-          </button>
-          <button onClick={() => navigate('/orderlist')} className="bg-indigo-600 text-white py-2 px-4 rounded hover:bg-indigo-700 flex items-center gap-2">
-            <ArrowRight size={18} /> Go to Order List
-          </button>
         </div>
       </div>
     </div>

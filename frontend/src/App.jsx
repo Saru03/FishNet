@@ -19,13 +19,11 @@ import PriceForecast from './PriceForecast/PriceForecast';
 import MarketPricePrediction from './PriceForecast/MarketPricePrediction';
 import FishMarketComparator from './PriceForecast/FishMarketComparator';
 
-import Fishlist from './Inventory/Fishlist';
-import OrderList from './Inventory/OrderList';
-import SalesList from './Inventory/SalesList';
+import Inventory from './Inventory/Inventory';
 
-import MapweatherSections from './GeoWeather/Mapwethersections';  // Importing the MapweatherSections component
-import Maps from './GeoWeather/Maps';  // Importing the Maps component
-import Weather from './GeoWeather/Weather';  // Importing the Weather component
+import MapweatherSections from './GeoWeather/Mapwethersections';
+import Maps from './GeoWeather/Maps';
+import Weather from './GeoWeather/Weather';
 
 function App() {
   return (
@@ -52,15 +50,13 @@ function App() {
             <Route path="/market-price-prediction" element={<MarketPricePrediction />} />
             <Route path="/fish-market-comparator" element={<FishMarketComparator />} />
 
-            {/* Inventory Routes */}
-            <Route path="/inventory" element={<Fishlist />} />
-            <Route path="/orderlist" element={<OrderList />} />
-            <Route path="/saleslist" element={<SalesList />} />
+            {/* Inventory Route with Tabs */}
+            <Route path="/inventory" element={<Inventory />} />
 
             {/* Maps & Weather Routes */}
-            <Route path="/mapsandweather" element={<MapweatherSections />} />  {/* Home page section */}
-            <Route path="/maps" element={<Maps />} />  {/* Maps page */}
-            <Route path="/weather" element={<Weather />} />  {/* Weather page */}
+            <Route path="/mapsandweather" element={<MapweatherSections />} />
+            <Route path="/maps" element={<Maps />} />
+            <Route path="/weather" element={<Weather />} />
           </Routes>
         </main>
 

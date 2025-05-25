@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { PlusCircle, ClipboardList, ShoppingCart } from 'lucide-react';
+import { ClipboardList, BarChart2, PlusCircle } from 'lucide-react';
 
 const Fishlist = () => {
   const [fishItems, setFishItems] = useState([]);
@@ -9,8 +8,6 @@ const Fishlist = () => {
     quantity: '',
     price: ''
   });
-
-  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -27,6 +24,7 @@ const Fishlist = () => {
   };
 
   const totalPrice = (item) => parseInt(item.quantity) * parseInt(item.price);
+  const totalInventoryValue = fishItems.reduce((acc, item) => acc + totalPrice(item), 0);
 
   return (
     <div className="min-h-screen bg-gradient-to-r from-blue-100 to-indigo-200 p-8">
@@ -35,6 +33,25 @@ const Fishlist = () => {
           <ClipboardList className="w-6 h-6" /> Fish Inventory
         </h2>
 
+        {/* Stats Box */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+          <div className="bg-indigo-100 p-5 rounded-lg shadow-md flex items-center gap-4">
+            <BarChart2 className="text-indigo-600 w-10 h-10" />
+            <div>
+              <h4 className="text-xl font-bold text-indigo-700">Total Inventory Value</h4>
+              <p className="text-lg text-gray-700 font-semibold">₹{totalInventoryValue}</p>
+            </div>
+          </div>
+          <div className="bg-green-100 p-5 rounded-lg shadow-md flex items-center gap-4">
+            <ClipboardList className="text-green-600 w-10 h-10" />
+            <div>
+              <h4 className="text-xl font-bold text-green-700">Total Items</h4>
+              <p className="text-lg text-gray-700 font-semibold">{fishItems.length}</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Form */}
         <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
           <input
             type="text"
@@ -71,40 +88,28 @@ const Fishlist = () => {
           </button>
         </form>
 
-        <table className="w-full text-left text-sm border-collapse mb-6">
-          <thead className="bg-blue-200 text-blue-700">
-            <tr>
-              <th className="p-3">Fish Name</th>
-              <th className="p-3">Quantity (kg)</th>
-              <th className="p-3">Price (₹)</th>
-              <th className="p-3">Total (₹)</th>
-            </tr>
-          </thead>
-          <tbody>
-            {fishItems.map((item) => (
-              <tr key={item.id} className="border-t hover:bg-blue-50">
-                <td className="p-3">{item.fishName}</td>
-                <td className="p-3">{item.quantity}</td>
-                <td className="p-3">₹{item.price}</td>
-                <td className="p-3">₹{totalPrice(item)}</td>
+        {/* Table */}
+        <div className="overflow-x-auto">
+          <table className="w-full text-left text-sm border-collapse mb-6">
+            <thead className="bg-blue-200 text-blue-700">
+              <tr>
+                <th className="p-3">Fish Name</th>
+                <th className="p-3">Quantity (kg)</th>
+                <th className="p-3">Price (₹)</th>
+                <th className="p-3">Total (₹)</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-
-        <div className="mt-6 flex justify-center gap-6">
-          <button
-            onClick={() => navigate('/orderlist')}
-            className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg flex items-center gap-2"
-          >
-            <ShoppingCart className="w-5 h-5" /> Go to Order List
-          </button>
-          <button
-            onClick={() => navigate('/saleslist')}
-            className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg flex items-center gap-2"
-          >
-            <ClipboardList className="w-5 h-5" /> Go to Sales List
-          </button>
+            </thead>
+            <tbody>
+              {fishItems.map((item) => (
+                <tr key={item.id} className="border-t hover:bg-blue-50">
+                  <td className="p-3">{item.fishName}</td>
+                  <td className="p-3">{item.quantity}</td>
+                  <td className="p-3">₹{item.price}</td>
+                  <td className="p-3">₹{totalPrice(item)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>

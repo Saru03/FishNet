@@ -95,7 +95,7 @@ const Home = () => {
         Welcome to <span className="text-green-500">Fish</span><span className="text-blue-400">Net</span>
       </h1>
       <p className="text-lg text-center text-gray-600 mb-10 max-w-xl">
-        Empowering Fisheries with Smart Technology 🐟— Plan better and fish safer.
+        Empowering Indian Fishers with Smart Technology 🐟— Plan better and fish safer.
       </p>
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 justify-center">

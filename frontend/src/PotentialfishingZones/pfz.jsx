@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { MapContainer, TileLayer, Popup, useMapEvents, Marker } from 'react-leaflet';
+import React, { useState } from 'react';
+import { MapContainer, TileLayer, useMapEvents, Marker } from 'react-leaflet';
 import { ToastContainer, toast } from 'react-toastify';
 import axios from 'axios';
 import 'react-toastify/dist/ReactToastify.css';
@@ -8,13 +8,13 @@ import 'leaflet/dist/leaflet.css';
 const PFZ = () => {
   const [selectedDate, setSelectedDate] = useState('');
   const [coordinates, setCoordinates] = useState(null);
-  const [popupContent, setPopupContent] = useState(null);
+  const [locationData, setLocationData] = useState(null);
 
   const handleMapClick = async (e) => {
     const lat = e.latlng.lat;
     const lng = e.latlng.lng;
     setCoordinates({ lat, lng });
-    setPopupContent(null);
+    setLocationData(null);
 
     if (!selectedDate) {
       toast.warn("🗓️ Please select a date first.");
@@ -22,12 +22,20 @@ const PFZ = () => {
     }
 
     try {
-      const response = await axios.get(`http://your-backend-url.com/api/fishing-potential`, {
-        params: { lat, lng, date: selectedDate },
-      });
+      const payload = {
+        latitude: lat,
+        longitude: lng,
+        date: selectedDate,
+      };
 
+      const response = await axios.post(`http://your-backend-url.com/api/fishing-potential`, payload);
       const potential = response.data.potential || 'Unknown';
-      setPopupContent(`🎣 Fishing Potential: ${potential}`);
+
+      setLocationData({
+        lat,
+        lng,
+        potential,
+      });
     } catch (error) {
       toast.error("❌ Couldn't fetch data from backend.");
       console.error(error);
@@ -40,7 +48,7 @@ const PFZ = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-sky-50 to-blue-100 px-4 py-6">
+    <div className="relative min-h-screen bg-gradient-to-r from-sky-50 to-blue-100 px-4 py-6">
       <div className="max-w-3xl mx-auto bg-white/70 backdrop-blur-xl rounded-2xl shadow-xl p-6 md:p-8 space-y-6">
         <h2 className="text-2xl md:text-3xl font-bold text-center text-blue-800 drop-shadow-sm">
           🎯 Potential Fishing Zones
@@ -56,7 +64,7 @@ const PFZ = () => {
           />
         </div>
 
-        <div className="border border-blue-300 rounded-xl overflow-hidden shadow-md">
+        <div className="border border-blue-300 rounded-xl overflow-hidden shadow-md relative">
           <MapContainer
             center={[20.5937, 78.9629]}
             zoom={5}
@@ -65,27 +73,21 @@ const PFZ = () => {
             <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
             <MapClickHandler />
 
-            {coordinates && popupContent && (
-              <Marker position={[coordinates.lat, coordinates.lng]}>
-                <Popup>
-                  <div
-                    style={{
-                      borderRadius: '18px',
-                      backgroundColor: '#f0f9ff',
-                      boxShadow: '0 4px 14px rgba(0, 0, 0, 0.15)',
-                      fontFamily: 'Segoe UI, sans-serif',
-                      fontSize: '15px',
-                      padding: '12px 16px',
-                      color: '#1e3a8a',
-                      maxWidth: '200px',
-                    }}
-                  >
-                    {popupContent}
-                  </div>
-                </Popup>
-              </Marker>
+            {coordinates && (
+              <Marker position={[coordinates.lat, coordinates.lng]} />
             )}
           </MapContainer>
+
+          {locationData && (
+            <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-md border border-blue-300 rounded-xl shadow-lg p-4 w-[300px] max-w-full z-[999]">
+              <h3 className="text-lg font-bold text-blue-800 mb-2">📍 Location Info</h3>
+              <p className="text-sm text-gray-800">
+                <strong>Latitude:</strong> {locationData.lat.toFixed(4)}<br />
+                <strong>Longitude:</strong> {locationData.lng.toFixed(4)}<br />
+                <strong>Fishing Potential:</strong> 🎣 {locationData.potential}
+              </p>
+            </div>
+          )}
         </div>
       </div>
 

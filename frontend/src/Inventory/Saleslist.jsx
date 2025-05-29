@@ -124,11 +124,12 @@ const SalesList = () => {
 
 export default SalesList;*/}
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { PlusCircle, ArrowRight } from 'lucide-react';
+import OrderList from './OrderList'; // make sure this path is correct
 
 const SalesList = () => {
   const [sales, setSales] = useState([]);
+  const [showOrderList, setShowOrderList] = useState(false);
   const [formData, setFormData] = useState({
     saleDate: '',
     fishSpecies: '',
@@ -137,7 +138,6 @@ const SalesList = () => {
     quantity: '',
     pricePerFish: ''
   });
-  const navigate = useNavigate();
 
   useEffect(() => {
     fetch('http://127.0.0.1:8000/inventory/sales/')
@@ -193,6 +193,8 @@ const SalesList = () => {
 
   const totalRevenue = sales.reduce((acc, sale) => acc + getSaleTotal(sale), 0);
 
+  if (showOrderList) return <OrderList />;
+
   return (
     <div className="min-h-screen w-full bg-gradient-to-br from-blue-100 to-blue-200 pt-24 pb-12 px-4">
       <div className="max-w-6xl mx-auto">
@@ -200,67 +202,17 @@ const SalesList = () => {
 
         {/* Sale Entry Form */}
         <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-3 gap-4 bg-white shadow p-6 rounded-xl mb-8">
-          <input
-            type="date"
-            name="saleDate"
-            value={formData.saleDate}
-            onChange={handleChange}
-            required
-            className="p-3 border rounded"
-          />
-          <input
-            type="text"
-            name="fishSpecies"
-            value={formData.fishSpecies}
-            onChange={handleChange}
-            placeholder="Fish Species"
-            required
-            className="p-3 border rounded"
-          />
-          <select
-            name="fishSize"
-            value={formData.fishSize}
-            onChange={handleChange}
-            className="p-3 border rounded"
-          >
+          <input type="date" name="saleDate" value={formData.saleDate} onChange={handleChange} required className="p-3 border rounded" />
+          <input type="text" name="fishSpecies" value={formData.fishSpecies} onChange={handleChange} placeholder="Fish Species" required className="p-3 border rounded" />
+          <select name="fishSize" value={formData.fishSize} onChange={handleChange} className="p-3 border rounded">
             <option value="small">Small</option>
             <option value="medium">Medium</option>
             <option value="large">Large</option>
           </select>
-          <input
-            type="text"
-            name="marketName"
-            value={formData.marketName}
-            onChange={handleChange}
-            placeholder="Fish Market Name"
-            required
-            className="p-3 border rounded"
-          />
-          <input
-            type="number"
-            name="quantity"
-            value={formData.quantity}
-            onChange={handleChange}
-            placeholder="Quantity"
-            required
-            className="p-3 border rounded"
-            min="1"
-          />
-          <input
-            type="number"
-            name="pricePerFish"
-            value={formData.pricePerFish}
-            onChange={handleChange}
-            placeholder="Price per Fish (₹)"
-            required
-            className="p-3 border rounded"
-            min="0"
-            step="0.01"
-          />
-          <button
-            type="submit"
-            className="col-span-1 md:col-span-3 bg-blue-600 text-white py-3 rounded hover:bg-blue-700 transition flex items-center justify-center gap-2"
-          >
+          <input type="text" name="marketName" value={formData.marketName} onChange={handleChange} placeholder="Fish Market Name" required className="p-3 border rounded" />
+          <input type="number" name="quantity" value={formData.quantity} onChange={handleChange} placeholder="Quantity" required className="p-3 border rounded" min="1" />
+          <input type="number" name="pricePerFish" value={formData.pricePerFish} onChange={handleChange} placeholder="Price per Fish (₹)" required className="p-3 border rounded" min="0" step="0.01" />
+          <button type="submit" className="col-span-1 md:col-span-3 bg-blue-600 text-white py-3 rounded hover:bg-blue-700 transition flex items-center justify-center gap-2">
             <PlusCircle size={20} /> Add Sale
           </button>
         </form>
@@ -283,11 +235,7 @@ const SalesList = () => {
               {sales.map((sale) =>
                 sale.items.map((item, index) => (
                   <tr key={`${sale.id}-${index}`} className="border-t hover:bg-gray-50">
-                    {index === 0 && (
-                      <td className="p-3" rowSpan={sale.items.length}>
-                        {sale.sale_date}
-                      </td>
-                    )}
+                    {index === 0 && <td className="p-3" rowSpan={sale.items.length}>{sale.sale_date}</td>}
                     <td className="p-3">{item.fish}</td>
                     <td className="p-3 capitalize">{item.fish_size || formData.fishSize}</td>
                     <td className="p-3">{sale.market_name || formData.marketName}</td>
@@ -300,9 +248,7 @@ const SalesList = () => {
             </tbody>
             <tfoot className="bg-gray-200 font-bold">
               <tr>
-                <td colSpan={6} className="p-3 text-right">
-                  Total Revenue:
-                </td>
+                <td colSpan={6} className="p-3 text-right">Total Revenue:</td>
                 <td className="p-3">₹{totalRevenue}</td>
               </tr>
             </tfoot>
@@ -312,22 +258,14 @@ const SalesList = () => {
         {/* Navigation Buttons */}
         <div className="mt-8 flex justify-center gap-4">
           <button
-            onClick={() => navigate('/inventory')}
-            className="bg-gray-700 text-white py-2 px-4 rounded hover:bg-gray-800 flex items-center gap-2"
-          >
-            <ArrowRight size={18} /> Back to Inventory
-          </button>
-
-          <button
-            onClick={() => navigate('/orderlist')}
+            onClick={() => setShowOrderList(true)}
             className="bg-indigo-600 text-white py-2 px-4 rounded hover:bg-indigo-700 flex items-center gap-2"
           >
-            <ArrowRight size={18} /> Go to Order List
+            <ArrowRight size={18} /> Move to OrderList
           </button>
 
-          {/* Added Add Order button */}
           <button
-            onClick={() => navigate('/orderlist')}
+            onClick={() => setShowOrderList(true)}
             className="bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700 flex items-center gap-2"
           >
             <PlusCircle size={18} /> Add Order
@@ -339,4 +277,5 @@ const SalesList = () => {
 };
 
 export default SalesList;
+
 

@@ -1,6 +1,6 @@
 import './App.css';
 import './index.css';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import 'leaflet/dist/leaflet.css';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -68,7 +68,7 @@ function App() {
             <Route path="/inventory" element={<Inventory />} />
             <Route path="/inventory/fishlist" element={<Fishlist />} />
             <Route path="/inventory/orderlist" element={<Orderlist />} />
-            <Route path="/inventory/saleslist" element={<Saleslist />} />
+            <Route path="/saleslist" element={<Saleslist />} /> {/* <- changed path for saleslist */}
 
             {/* Maps & Weather */}
             <Route path="/mapsandweather" element={<MapweatherSections />} />
@@ -77,6 +77,9 @@ function App() {
 
             {/* PFZ */}
             <Route path="/fishing-zones" element={<PFZ />} />
+
+            {/* Redirects for internal navigation without full reload */}
+            <Route path="/inventory/saleslist" element={<Navigate to="/saleslist" replace />} />
           </Routes>
         </main>
 

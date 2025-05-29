@@ -127,7 +127,6 @@ const OrderList = () => {
 
   const navigate = useNavigate();
 
-  // Fetch orders and fish list on mount
   useEffect(() => {
     fetch('http://127.0.0.1:8000/inventory/orders/')
       .then(res => res.json())
@@ -156,11 +155,11 @@ const OrderList = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Simple validation before sending
     if (!deliveryDate) {
       alert("Please select a delivery date");
       return;
     }
+
     for (let item of orderItems) {
       if (!item.fish_id || !item.quantity || item.quantity <= 0) {
         alert("Please select fish and quantity for all items");
@@ -169,7 +168,7 @@ const OrderList = () => {
     }
 
     const payload = {
-      deliveryDate, // backend might want orderDate too? adjust if needed
+      deliveryDate,
       status,
       item_details: orderItems.map(item => ({
         fish_id: parseInt(item.fish_id),
@@ -199,7 +198,6 @@ const OrderList = () => {
       });
   };
 
-  // Function to convert order to sale and navigate
   const handleConvertOrderToSale = (orderId) => {
     fetch(`http://127.0.0.1:8000/orders/${orderId}/convert-to-sale/`, {
       method: 'POST',
@@ -212,9 +210,7 @@ const OrderList = () => {
       })
       .then(data => {
         alert(`Order converted to sale successfully! Sale ID: ${data.id}`);
-        // Remove converted order from list
         setOrders(prev => prev.filter(order => order.id !== orderId));
-        // Navigate to sales list
         navigate('/saleslist');
       })
       .catch(error => {
@@ -230,7 +226,6 @@ const OrderList = () => {
         {/* Add Order Form */}
         <div className="bg-white p-6 rounded-xl shadow-md mb-8">
           <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* Date & Status */}
             <div className="flex flex-col">
               <label className="mb-1 font-semibold">Delivery Date</label>
               <input
@@ -253,7 +248,6 @@ const OrderList = () => {
               </select>
             </div>
 
-            {/* Items */}
             <div className="col-span-2">
               <h3 className="text-xl font-semibold mb-2">Order Items</h3>
               {orderItems.map((item, index) => (
@@ -266,12 +260,12 @@ const OrderList = () => {
                   >
                     <option value="">Select Fish</option>
                     <option value="Indian Mackerel">Indian Mackerel</option>
-            <option value="Rock Lobster">Rock Lobster</option>
-            <option value="Silver Pomfret">Silver Pomfret</option>
-            <option value="Indian White Prawn">Indian White Prawn</option>
-            <option value="Spotted Crab">Spotted Crab</option>
-            <option value="Indo pacific Seer Fish">Indo pacific Seer Fish</option>
-            <option value="Johns Snapper">Johns Snapper</option>
+                    <option value="Rock Lobster">Rock Lobster</option>
+                    <option value="Silver Pomfret">Silver Pomfret</option>
+                    <option value="Indian White Prawn">Indian White Prawn</option>
+                    <option value="Spotted Crab">Spotted Crab</option>
+                    <option value="Indo pacific Seer Fish">Indo pacific Seer Fish</option>
+                    <option value="Johns Snapper">Johns Snapper</option>
                     {fishList.map(fish => (
                       <option key={fish.id} value={fish.id}>{fish.name}</option>
                     ))}
@@ -296,7 +290,6 @@ const OrderList = () => {
               </button>
             </div>
 
-            {/* Submit Button */}
             <div className="col-span-2 flex justify-center">
               <button
                 type="submit"
@@ -332,7 +325,6 @@ const OrderList = () => {
                       <td className="p-3">{order.deliveryDate}</td>
                       <td className="p-3">{order.status}</td>
                       <td className="p-3">
-                        {/* Show Move to Sale only if status is completed */}
                         {order.status === 'completed' && (
                           <button
                             onClick={() => handleConvertOrderToSale(order.id)}
@@ -366,7 +358,7 @@ const OrderList = () => {
             onClick={() => navigate('/saleslist')}
             className="bg-green-600 text-white py-2 px-5 rounded-lg hover:bg-green-700"
           >
-            ➡️ Sales
+            🛒 Move to Sales
           </button>
         </div>
       </div>

@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { BiUser } from "react-icons/bi";
 import { AiOutlineUnlock } from "react-icons/ai";
-
+import { useAuth } from '../context/AuthContext';
 const LoginSignup = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-white to-blue-100 flex items-center justify-center px-4 py-16">
@@ -57,6 +57,8 @@ const LoginSignup = () => {
       </div>
     </div>
   );
+  const { login } = useAuth();
+login(); 
 };
 
 export default LoginSignup;

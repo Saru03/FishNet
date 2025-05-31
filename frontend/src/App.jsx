@@ -21,7 +21,6 @@ import QualityAssurance from './QualityAssurance/QualityAssurance';
 // 📊 Price Forecast
 import ForecastSections from './PriceForecast/ForecastSections';
 import PriceForecast from './PriceForecast/PriceForecast';
-import MarketPricePrediction from './PriceForecast/MarketPricePrediction';
 import FishMarketComparator from './PriceForecast/FishMarketComparator';
 
 // 📦 Inventory
@@ -38,7 +37,14 @@ import Weather from './GeoWeather/Weather';
 // 🐟 Potential Fishing Zones
 import PFZ from './PotentialfishingZones/pfz';
 
+// 👤 Dashboard
+import { useAuth } from './context/AuthContext';
+//import FishersDashboard from './Components/FishersDashboard';
+import FishersDashboard from './Components/FishersDashboard';
+
 function App() {
+  const isLoggedIn = true; // Replace with actual auth check logic
+
   return (
     <Router>
       <div className="flex flex-col min-h-screen">
@@ -61,14 +67,14 @@ function App() {
             {/* Price Forecast */}
             <Route path="/forecast-section" element={<ForecastSections />} />
             <Route path="/price-forecast" element={<PriceForecast />} />
-            <Route path="/market-price-prediction" element={<MarketPricePrediction />} />
+            
             <Route path="/fish-market-comparator" element={<FishMarketComparator />} />
 
             {/* Inventory */}
             <Route path="/inventory" element={<Inventory />} />
             <Route path="/inventory/fishlist" element={<Fishlist />} />
             <Route path="/inventory/orderlist" element={<Orderlist />} />
-            <Route path="/saleslist" element={<Saleslist />} /> {/* <- changed path for saleslist */}
+            <Route path="/saleslist" element={<Saleslist />} />
 
             {/* Maps & Weather */}
             <Route path="/mapsandweather" element={<MapweatherSections />} />
@@ -77,6 +83,9 @@ function App() {
 
             {/* PFZ */}
             <Route path="/fishing-zones" element={<PFZ />} />
+
+            {/* Dashboard (Protected) */}
+            <Route path="/dashboard" element={isLoggedIn ? <FishersDashboard /> : <Navigate to="/login" replace />} />
 
             {/* Redirects for internal navigation without full reload */}
             <Route path="/inventory/saleslist" element={<Navigate to="/saleslist" replace />} />

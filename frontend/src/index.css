@@ -1,10 +1,12 @@
 @import "tailwindcss";
+
+/* Make leaflet map fill its container */
 .leaflet-container {
   height: 100%;
   width: 100%;
 }
-/* src/index.css or wherever your global styles are */
 
+/* Reset default styles */
 body {
   margin: 0;
   padding: 0;
@@ -13,8 +15,7 @@ body {
   background-color: #f9fafb;
 }
 
-
-/* Optional: If you want to layer a color over the image */
+/* Aqua overlay behind everything */
 body::before {
   content: "";
   position: fixed;
@@ -22,9 +23,6 @@ body::before {
   left: 0;
   height: 100vh;
   width: 100vw;
-  background-color: rgba(0, 255, 255, 0.2); /* semi-transparent aqua overlay */
+  background-color: rgba(0, 255, 255, 0.2); /* semi-transparent aqua */
   z-index: -1;
 }
-
-
- 

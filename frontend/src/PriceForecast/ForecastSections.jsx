@@ -16,12 +16,7 @@ const ForecastSections = () => {
           Price Prediction
         </button>
 
-        <button
-          onClick={() => navigate('/market-price-prediction')}
-          className="w-full bg-green-600 text-white py-4 px-6 rounded-xl text-lg hover:bg-green-700 shadow"
-        >
-          Market Price Prediction
-        </button>
+        
 
         <button
           onClick={() => navigate('/fish-market-comparator')}

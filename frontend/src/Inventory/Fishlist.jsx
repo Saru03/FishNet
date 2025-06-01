@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { PlusCircle, Pencil, Trash2 } from 'lucide-react';
+import { PlusCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const API_BASE = 'http://127.0.0.1:8000/inventory/fishstock/';
@@ -74,15 +74,25 @@ const LowStockPopup = ({ isAuthenticated, lowStockItems }) => {
 const FishList = () => {
   const [fishItems, setFishItems] = useState([]);
   const [lowStockItems, setLowStockItems] = useState([]);
-  const [formData, setFormData] = useState({ fishName: '', quantity: '', price: '' });
-  const [editingId, setEditingId] = useState(null);
+  const [formData, setFormData] = useState({
+    fishName: '',
+    quantity: '',
+    price: ''
+  });
   const [error, setError] = useState('');
 
   const navigate = useNavigate();
   const isAuthenticated = !!localStorage.getItem('access_token');
 
-  const fetchFishData = () => {
-    fetch(API_BASE, { headers: getAuthHeaders() })
+  useEffect(() => {
+    if (!isAuthenticated) {
+      setError('You must be logged in to view fish inventory.');
+      return;
+    }
+
+    fetch(API_BASE, {
+      headers: getAuthHeaders(),
+    })
       .then(res => {
         if (res.status === 401) {
           setError('Session expired. Please login again.');
@@ -102,15 +112,7 @@ const FishList = () => {
       .catch(err => {
         if (err.message !== 'Unauthorized') setError(err.message);
       });
-  };
-
-  useEffect(() => {
-    if (!isAuthenticated) {
-      setError('You must be logged in to view fish inventory.');
-      return;
-    }
-    fetchFishData();
-  }, [isAuthenticated]);
+  }, [isAuthenticated, navigate]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -133,7 +135,7 @@ const FishList = () => {
       description: '',
       cold_storage: 'Default Storage',
       low_stock_threshold: 10,
-      date_added: new Date().toISOString().split('T')[0],
+      date_added: new Date().toISOString().split('T')[0]
     };
 
     try {
@@ -143,57 +145,27 @@ const FishList = () => {
         body: JSON.stringify(payload)
       });
 
-      if (!res.ok) throw new Error('Failed to add fish');
+      if (res.status === 401) {
+        setError('Session expired. Please login again.');
+        localStorage.removeItem('access_token');
+        setTimeout(() => navigate('/login'), 2000);
+        return;
+      }
 
-      fetchFishData();
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.detail || 'Failed to add fish');
+      }
+
+      const newFish = await res.json();
+      setFishItems(prev => [...prev, newFish]);
+
+      if (newFish.quantity < newFish.low_stock_threshold) {
+        setLowStockItems(prev => [...prev, newFish]);
+      }
+
       setFormData({ fishName: '', quantity: '', price: '' });
-    } catch (err) {
-      setError(err.message);
-    }
-  };
-
-  const handleEdit = (fish) => {
-    setEditingId(fish.id);
-    setFormData({
-      fishName: fish.name,
-      quantity: fish.quantity,
-      price: fish.price
-    });
-  };
-
-  const handleUpdate = async () => {
-    const payload = {
-      name: formData.fishName,
-      quantity: parseInt(formData.quantity),
-      price: parseFloat(formData.price),
-    };
-
-    try {
-      const res = await fetch(`${API_BASE}${editingId}/`, {
-        method: 'PATCH',
-        headers: getAuthHeaders(),
-        body: JSON.stringify(payload)
-      });
-
-      if (!res.ok) throw new Error('Failed to update fish');
-
-      fetchFishData();
-      setEditingId(null);
-      setFormData({ fishName: '', quantity: '', price: '' });
-    } catch (err) {
-      setError(err.message);
-    }
-  };
-
-  const handleDelete = async (id) => {
-    try {
-      const res = await fetch(`${API_BASE}${id}/`, {
-        method: 'DELETE',
-        headers: getAuthHeaders()
-      });
-
-      if (!res.ok) throw new Error('Failed to delete fish');
-      fetchFishData();
+      setError('');
     } catch (err) {
       setError(err.message);
     }
@@ -204,17 +176,19 @@ const FishList = () => {
       <div className="max-w-5xl mx-auto">
         <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">🐟 Fish Inventory</h2>
 
+        {/* Error message */}
         {error && (
           <div className="bg-red-200 text-red-900 p-3 rounded mb-4 text-center font-semibold">
             ⚠️ {error}
           </div>
         )}
 
+        {/* LowStockPopup Button & Popup */}
         <LowStockPopup isAuthenticated={isAuthenticated} lowStockItems={lowStockItems} />
 
-        {/* 🐠 Add or Update Form */}
+        {/* 🐠 Add Fish Form */}
         <form
-          onSubmit={editingId ? (e) => { e.preventDefault(); handleUpdate(); } : handleAddFish}
+          onSubmit={handleAddFish}
           className="grid grid-cols-1 md:grid-cols-3 gap-4 bg-white shadow p-6 rounded-xl mb-8"
         >
           <input
@@ -248,8 +222,7 @@ const FishList = () => {
             type="submit"
             className="col-span-1 md:col-span-3 bg-teal-600 text-white py-3 rounded hover:bg-teal-700 transition flex items-center justify-center gap-2"
           >
-            <PlusCircle size={20} />
-            {editingId ? 'Update Fish' : 'Add Fish'}
+            <PlusCircle size={20} /> Add Fish
           </button>
         </form>
 
@@ -264,13 +237,12 @@ const FishList = () => {
                 <th className="p-3">Price (₹)</th>
                 <th className="p-3">Storage</th>
                 <th className="p-3">Date Added</th>
-                <th className="p-3">Actions</th>
               </tr>
             </thead>
             <tbody>
-              {fishItems.map((fish) => (
+              {fishItems.map((fish, index) => (
                 <tr
-                  key={fish.id}
+                  key={index}
                   className={`border-t hover:bg-gray-50 ${
                     fish.quantity < fish.low_stock_threshold ? 'bg-red-50' : ''
                   }`}
@@ -281,14 +253,6 @@ const FishList = () => {
                   <td className="p-3">₹{fish.price}</td>
                   <td className="p-3">{fish.cold_storage}</td>
                   <td className="p-3">{fish.date_added}</td>
-                  <td className="p-3 flex gap-3">
-                    <button onClick={() => handleEdit(fish)} className="text-blue-600 hover:underline flex items-center gap-1">
-                      <Pencil size={16} /> Edit
-                    </button>
-                    <button onClick={() => handleDelete(fish.id)} className="text-red-600 hover:underline flex items-center gap-1">
-                      <Trash2 size={16} /> Delete
-                    </button>
-                  </td>
                 </tr>
               ))}
             </tbody>

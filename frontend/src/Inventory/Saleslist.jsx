@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { PlusCircle, ArrowRight } from 'lucide-react';
-import OrderList from './OrderList'; // make sure this path is correct
+import OrderList from './OrderList';
 
 const SalesList = () => {
   const [sales, setSales] = useState([]);
+  const [filteredSales, setFilteredSales] = useState([]);
+  const [reportType, setReportType] = useState('all');
   const [showOrderList, setShowOrderList] = useState(false);
   const [formData, setFormData] = useState({
     saleDate: '',
@@ -17,9 +19,43 @@ const SalesList = () => {
   useEffect(() => {
     fetch('http://127.0.0.1:8000/inventory/sales/')
       .then(res => res.json())
-      .then(data => setSales(data))
+      .then(data => {
+        setSales(data);
+        setFilteredSales(data);
+      })
       .catch(err => console.error('Failed to fetch sales:', err));
   }, []);
+
+  useEffect(() => {
+    const filterSales = () => {
+      if (reportType === 'all') {
+        setFilteredSales(sales);
+        return;
+      }
+
+      const now = new Date();
+      const startOfToday = new Date(now.setHours(0, 0, 0, 0));
+      const startOfWeek = new Date();
+      startOfWeek.setDate(now.getDate() - now.getDay());
+      const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+
+      const filtered = sales.filter(sale => {
+        const saleDate = new Date(sale.sale_date);
+        if (reportType === 'daily') {
+          return saleDate >= startOfToday;
+        } else if (reportType === 'weekly') {
+          return saleDate >= startOfWeek;
+        } else if (reportType === 'monthly') {
+          return saleDate >= startOfMonth;
+        }
+        return true;
+      });
+
+      setFilteredSales(filtered);
+    };
+
+    filterSales();
+  }, [reportType, sales]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -45,28 +81,29 @@ const SalesList = () => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
     })
-    .then(res => {
-      if (!res.ok) throw new Error('Network response was not ok');
-      return res.json();
-    })
-    .then(newSale => {
-      setSales([...sales, newSale]);
-      setFormData({
-        saleDate: '',
-        fishSpecies: '',
-        fishSize: 'small',
-        marketName: '',
-        quantity: '',
-        pricePerFish: ''
-      });
-    })
-    .catch(err => console.error('Failed to add sale:', err));
+      .then(res => {
+        if (!res.ok) throw new Error('Network response was not ok');
+        return res.json();
+      })
+      .then(newSale => {
+        const updatedSales = [...sales, newSale];
+        setSales(updatedSales);
+        setFormData({
+          saleDate: '',
+          fishSpecies: '',
+          fishSize: 'small',
+          marketName: '',
+          quantity: '',
+          pricePerFish: ''
+        });
+      })
+      .catch(err => console.error('Failed to add sale:', err));
   };
 
   const getSaleTotal = (sale) =>
     sale.items.reduce((sum, item) => sum + item.quantity * item.price_per_unit, 0);
 
-  const totalRevenue = sales.reduce((acc, sale) => acc + getSaleTotal(sale), 0);
+  const totalRevenue = filteredSales.reduce((acc, sale) => acc + getSaleTotal(sale), 0);
 
   if (showOrderList) return <OrderList />;
 
@@ -74,6 +111,24 @@ const SalesList = () => {
     <div className="min-h-screen w-full bg-gradient-to-br from-blue-100 to-blue-200 pt-24 pb-12 px-4">
       <div className="max-w-6xl mx-auto">
         <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">📦 Sales Records</h2>
+
+        {/* Report Filter Dropdown */}
+        <div className="mb-6 flex items-center gap-4 justify-center">
+          <label htmlFor="reportType" className="text-gray-700 font-semibold">
+            📊 View Sales Report:
+          </label>
+          <select
+            id="reportType"
+            className="p-2 border rounded shadow-sm bg-white"
+            value={reportType}
+            onChange={(e) => setReportType(e.target.value)}
+          >
+            <option value="daily">Daily Report</option>
+            <option value="weekly">Weekly Report</option>
+            <option value="monthly">Monthly Report</option>
+            <option value="all">All Sales</option>
+          </select>
+        </div>
 
         {/* Sale Entry Form */}
         <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-3 gap-4 bg-white shadow p-6 rounded-xl mb-8">
@@ -107,7 +162,7 @@ const SalesList = () => {
               </tr>
             </thead>
             <tbody>
-              {sales.map((sale) =>
+              {filteredSales.map((sale) =>
                 sale.items.map((item, index) => (
                   <tr key={`${sale.id}-${index}`} className="border-t hover:bg-gray-50">
                     {index === 0 && <td className="p-3" rowSpan={sale.items.length}>{sale.sale_date}</td>}
@@ -152,5 +207,3 @@ const SalesList = () => {
 };
 
 export default SalesList;
-
-

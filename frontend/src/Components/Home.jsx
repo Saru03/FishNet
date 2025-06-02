@@ -1,8 +1,25 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import FishersDashboard from "./FishersDashboard"; // make sure the path is right
 
 const Home = () => {
   const navigate = useNavigate();
+  const loggedIn = localStorage.getItem("loggedIn") === "true";
+
+  const handleCardClick = (route) => {
+    if (route === "/inventory") {
+      if (!loggedIn) {
+        alert("Log in to get access to inventory");
+        setTimeout(() => {
+          navigate(`/login?redirectTo=${route}`);
+        }, 200);
+        return;
+      }
+      navigate(route);
+    } else {
+      navigate(route);
+    }
+  };
 
   const cardData = [
     {
@@ -92,13 +109,18 @@ const Home = () => {
   return (
     <div className="min-h-screen pt-20 pb-10 px-4 bg-gradient-to-b from-blue-50 to-blue-100 flex flex-col items-center mt-12">
       <h1 className="text-4xl sm:text-5xl font-bold text-center text-blue-700 mb-4">
-        Welcome to <span className="text-green-500">Fish</span><span className="text-blue-400">Net</span>
+        Welcome to <span className="text-green-500">Fish</span>
+        <span className="text-blue-400">Net</span>
       </h1>
       <p className="text-lg text-center text-gray-600 mb-10 max-w-xl">
         Empowering Indian Fishers with Smart Technology 🐟— Plan better and fish safer.
       </p>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 justify-center">
+      {/* Show dashboard only if logged in */}
+      {loggedIn && <FishersDashboard />}
+
+      {/* Cards below dashboard */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 justify-center mt-10">
         {cardData.slice(0, 3).map((card, index) => (
           <div
             key={index}
@@ -110,7 +132,7 @@ const Home = () => {
             <p className="text-gray-600 mb-5 text-center min-h-[72px]">{card.desc}</p>
             <div className={`flex justify-center ${card.liftButton ? "-mt-2" : ""}`}>
               <button
-                onClick={() => navigate(card.route)}
+                onClick={() => handleCardClick(card.route)}
                 className={`px-5 py-2 ${card.styles.bg} text-white rounded-full font-semibold shadow-md ${card.styles.bgHover} hover:shadow-lg hover:scale-105 transition-all duration-300 focus:outline-none ${card.styles.ring}`}
               >
                 {card.btn}
@@ -135,7 +157,7 @@ const Home = () => {
             <p className="text-gray-600 mb-5 text-center min-h-[72px]">{card.desc}</p>
             <div className={`flex justify-center ${card.liftButton ? "-mt-2" : ""}`}>
               <button
-                onClick={() => navigate(card.route)}
+                onClick={() => handleCardClick(card.route)}
                 className={`px-5 py-2 ${card.styles.bg} text-white rounded-full font-semibold shadow-md ${card.styles.bgHover} hover:shadow-lg hover:scale-105 transition-all duration-300 focus:outline-none ${card.styles.ring}`}
               >
                 {card.btn}

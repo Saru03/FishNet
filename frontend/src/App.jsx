@@ -1,6 +1,6 @@
 import './App.css';
 import './index.css';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import 'leaflet/dist/leaflet.css';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -38,13 +38,16 @@ import Weather from './GeoWeather/Weather';
 import PFZ from './PotentialfishingZones/pfz';
 
 // 👤 Dashboard
-import { useAuth } from './context/AuthContext';
-//import FishersDashboard from './Components/FishersDashboard';
 import FishersDashboard from './Components/FishersDashboard';
+import { useAuth } from './context/AuthContext';
+
+// ✅ ProtectedRoute component
+const ProtectedRoute = ({ children }) => {
+  const isLoggedIn = localStorage.getItem('loggedIn') === 'true';
+  return isLoggedIn ? children : <Navigate to="/login" replace />;
+};
 
 function App() {
-  const isLoggedIn = true; // Replace with actual auth check logic
-
   return (
     <Router>
       <div className="flex flex-col min-h-screen">
@@ -52,42 +55,41 @@ function App() {
 
         <main className="flex-grow">
           <Routes>
-            {/* Core */}
+            {/* 🌐 Public Core Routes */}
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/about" element={<About />} />
             <Route path="/user/:username" element={<User />} />
             <Route path="/register" element={<Register />} />
 
-            {/* Quality Assurance */}
+            {/* 🧪 Quality Assurance */}
             <Route path="/disease-detection" element={<Disease />} />
             <Route path="/freshness-detection" element={<Freshness />} />
             <Route path="/quality-assurance" element={<QualityAssurance />} />
 
-            {/* Price Forecast */}
+            {/* 📊 Price Forecast */}
             <Route path="/forecast-section" element={<ForecastSections />} />
             <Route path="/price-forecast" element={<PriceForecast />} />
-            
             <Route path="/fish-market-comparator" element={<FishMarketComparator />} />
 
-            {/* Inventory */}
-            <Route path="/inventory" element={<Inventory />} />
-            <Route path="/inventory/fishlist" element={<Fishlist />} />
-            <Route path="/inventory/orderlist" element={<Orderlist />} />
-            <Route path="/saleslist" element={<Saleslist />} />
+            {/* 🔒 Protected Inventory Routes */}
+            <Route path="/inventory" element={<ProtectedRoute><Inventory /></ProtectedRoute>} />
+            <Route path="/inventory/fishlist" element={<ProtectedRoute><Fishlist /></ProtectedRoute>} />
+            <Route path="/inventory/orderlist" element={<ProtectedRoute><Orderlist /></ProtectedRoute>} />
+            <Route path="/saleslist" element={<ProtectedRoute><Saleslist /></ProtectedRoute>} />
 
-            {/* Maps & Weather */}
+            {/* 🌍 Maps & Weather */}
             <Route path="/mapsandweather" element={<MapweatherSections />} />
             <Route path="/maps" element={<Maps />} />
             <Route path="/weather" element={<Weather />} />
 
-            {/* PFZ */}
+            {/* 🐟 PFZ */}
             <Route path="/fishing-zones" element={<PFZ />} />
 
-            {/* Dashboard (Protected) */}
-            <Route path="/dashboard" element={isLoggedIn ? <FishersDashboard /> : <Navigate to="/login" replace />} />
+            {/* 🔐 Dashboard */}
+            <Route path="/dashboard" element={<ProtectedRoute><FishersDashboard /></ProtectedRoute>} />
 
-            {/* Redirects for internal navigation without full reload */}
+            {/* ↪️ Redirects */}
             <Route path="/inventory/saleslist" element={<Navigate to="/saleslist" replace />} />
           </Routes>
         </main>

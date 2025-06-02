@@ -304,7 +304,7 @@ const FishersDashboard = () => {
               <p className="mb-2">
                 <strong>Stock status:</strong> {stockData.low_stock_count} items running low
               </p>
-              <p className="bg-white bg-opacity-20 p-4 rounded-lg">
+              <p className="bg-white bg-opacity-20 p-4 rounded-lg text-black">
                 💡 <strong>Suggestion:</strong> Good conditions for fishing! Focus on restocking low inventory items.
               </p>
             </div>

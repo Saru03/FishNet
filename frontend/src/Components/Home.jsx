@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import FishersDashboard from "./FishersDashboard"; // make sure the path is right
+import FishersDashboard from "./FishersDashboard";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -22,6 +22,7 @@ const Home = () => {
   };
 
   const cardData = [
+    // Your card data unchanged
     {
       title: "Inventory Management",
       desc: "Track your fish stock data seamlessly and efficiently.",
@@ -116,10 +117,8 @@ const Home = () => {
         Empowering Indian Fishers with Smart Technology 🐟— Plan better and fish safer.
       </p>
 
-      {/* Show dashboard only if logged in */}
       {loggedIn && <FishersDashboard />}
 
-      {/* Cards below dashboard */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 justify-center mt-10">
         {cardData.slice(0, 3).map((card, index) => (
           <div

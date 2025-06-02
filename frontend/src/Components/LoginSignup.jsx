@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { BiUser } from 'react-icons/bi';
 import { AiOutlineUnlock } from 'react-icons/ai';
 
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [rememberMe, setRememberMe] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const params = new URLSearchParams(location.search);
+  const redirectTo = params.get('redirectTo') || '/';
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -18,13 +23,29 @@ const Login = () => {
       storedUser.username === username &&
       storedUser.password === password
     ) {
+      // If remember me checked, save username in localStorage, else remove it
+      if (rememberMe) {
+        localStorage.setItem('rememberedUsername', username);
+      } else {
+        localStorage.removeItem('rememberedUsername');
+      }
+
       localStorage.setItem('loggedIn', 'true');
       alert('Login successful!');
-      navigate('/inventory');
+      navigate(redirectTo);
     } else {
       alert('Invalid username or password!');
     }
   };
+
+  // Load remembered username on mount
+  React.useEffect(() => {
+    const remembered = localStorage.getItem('rememberedUsername');
+    if (remembered) {
+      setUsername(remembered);
+      setRememberMe(true);
+    }
+  }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-white to-blue-100 flex items-center justify-center px-4 py-16">
@@ -54,6 +75,22 @@ const Login = () => {
               className="w-full text-white bg-transparent border border-gray-300 rounded-md py-3 px-4 pr-12 text-base focus:outline-none focus:border-cyan-300"
             />
             <AiOutlineUnlock className="absolute top-1/2 right-4 transform -translate-y-1/2 text-white text-xl" />
+          </div>
+
+          {/* Remember me + Forgot password */}
+          <div className="flex items-center justify-between text-white text-sm">
+            <label className="flex items-center space-x-2 cursor-pointer select-none">
+              <input
+                type="checkbox"
+                checked={rememberMe}
+                onChange={(e) => setRememberMe(e.target.checked)}
+                className="w-4 h-4 rounded border-gray-300 focus:ring-cyan-300"
+              />
+              <span>Remember me</span>
+            </label>
+            <Link to="/forgot-password" className="hover:underline text-cyan-200">
+              Forgot password?
+            </Link>
           </div>
 
           <button

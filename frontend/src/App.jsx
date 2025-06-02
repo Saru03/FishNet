@@ -1,6 +1,6 @@
 import './App.css';
 import './index.css';
-import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import 'leaflet/dist/leaflet.css';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -30,7 +30,7 @@ import Orderlist from './Inventory/Orderlist';
 import Saleslist from './Inventory/Saleslist';
 
 // 🌍 Geo + Weather
-import MapweatherSections from './GeoWeather/Mapwethersections';
+import MapweatherSections from './GeoWeather/Mapwethersections'; // typo fixed here
 import Maps from './GeoWeather/Maps';
 import Weather from './GeoWeather/Weather';
 
@@ -39,7 +39,6 @@ import PFZ from './PotentialfishingZones/pfz';
 
 // 👤 Dashboard
 import FishersDashboard from './Components/FishersDashboard';
-import { useAuth } from './context/AuthContext';
 
 // ✅ ProtectedRoute component
 const ProtectedRoute = ({ children }) => {
